@@ -9,11 +9,12 @@ import { cn } from '@/lib/utils';
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [serviciosOpen, setServiciosOpen] = useState(false);
+  const comingSoonHref = '/proximamente';
 
   const serviciosSubmenu = [
-    { href: '/servicios/quienes-somos', label: 'Quiénes Somos' },
-    { href: '/servicios/resena-historica', label: 'Reseña Histórica' },
-    { href: '/servicios/trabaja-con-nosotros', label: 'Trabaja con Nosotros' },
+    { href: comingSoonHref, label: 'Quiénes Somos' },
+    { href: comingSoonHref, label: 'Reseña Histórica' },
+    { href: comingSoonHref, label: 'Trabaja con Nosotros' },
   ];
 
   return (
@@ -62,7 +63,7 @@ export default function Navbar() {
                   </div>
                 </div>
 
-                <Link href="/obituarios" className="text-white hover:text-white/80 transition-colors duration-300 text-sm uppercase tracking-wide font-medium">
+                <Link href={comingSoonHref} className="text-white hover:text-white/80 transition-colors duration-300 text-sm uppercase tracking-wide font-medium">
                   Obituarios
                 </Link>
                 
@@ -87,25 +88,25 @@ export default function Navbar() {
 
               {/* Desktop Navigation - Derecha */}
               <div className="hidden lg:flex items-center space-x-6 flex-1 pl-32">
-                <Link href="/cotizar" className="text-white hover:text-white/80 transition-colors duration-300 text-sm uppercase tracking-wide font-medium">
+                <Link href={comingSoonHref} className="text-white hover:text-white/80 transition-colors duration-300 text-sm uppercase tracking-wide font-medium">
                   Cotizar Plan
                 </Link>
                 
-                <Link href="/contacto" className="text-white hover:text-white/80 transition-colors duration-300 text-sm uppercase tracking-wide font-medium">
+                <Link href={comingSoonHref} className="text-white hover:text-white/80 transition-colors duration-300 text-sm uppercase tracking-wide font-medium">
                   Contacto
                 </Link>
                 
-                <Link href="/recorrido-360" className="text-white hover:text-white/80 transition-colors duration-300 text-sm uppercase tracking-wide font-medium">
+                <Link href={comingSoonHref} className="text-white hover:text-white/80 transition-colors duration-300 text-sm uppercase tracking-wide font-medium">
                   Recorrido 360
                 </Link>
 
                 {/* Botones CTA */}
-                <Link href="/pagar-plan">
+                <Link href={comingSoonHref}>
                   <Button variant="secondary" size="sm">
                     Pagar Plan
                   </Button>
                 </Link>
-                <Link href="/login">
+                <Link href={comingSoonHref}>
                   <Button variant="outline" size="sm">
                     Ingresar
                   </Button>
@@ -168,7 +169,7 @@ export default function Navbar() {
             </div>
 
             <Link
-              href="/obituarios"
+              href={comingSoonHref}
               className="block px-2 py-2 text-white/90 hover:text-white transition-colors"
               onClick={() => setIsOpen(false)}
             >
@@ -184,7 +185,7 @@ export default function Navbar() {
             </Link>
             
             <Link
-              href="/cotizar"
+              href={comingSoonHref}
               className="block px-2 py-2 text-white/90 hover:text-white transition-colors"
               onClick={() => setIsOpen(false)}
             >
@@ -192,7 +193,7 @@ export default function Navbar() {
             </Link>
             
             <Link
-              href="/contacto"
+              href={comingSoonHref}
               className="block px-2 py-2 text-white/90 hover:text-white transition-colors"
               onClick={() => setIsOpen(false)}
             >
@@ -200,17 +201,17 @@ export default function Navbar() {
             </Link>
 
             <div className="pt-4 space-y-2 border-t border-border">
-              <Link href="/recorrido-360" className="block">
+              <Link href={comingSoonHref} className="block">
                 <Button variant="primary" size="sm" className="w-full">
                   Conoce Nuestras Salas
                 </Button>
               </Link>
-              <Link href="/pagar-plan" className="block">
+              <Link href={comingSoonHref} className="block">
                 <Button variant="secondary" size="sm" className="w-full">
                   Pagar Plan
                 </Button>
               </Link>
-              <Link href="/login" className="block">
+              <Link href={comingSoonHref} className="block">
                 <Button variant="outline" size="sm" className="w-full">
                   Ingresar
                 </Button>

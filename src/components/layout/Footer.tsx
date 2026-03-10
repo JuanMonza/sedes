@@ -12,34 +12,35 @@ export default function Footer() {
     email: '',
   });
   const [loading, setLoading] = useState(false);
+  const comingSoonHref = '/proximamente';
 
   const currentYear = new Date().getFullYear();
 
   const footerLinks = {
     servicios: [
-      { label: 'Quiénes Somos', href: '/servicios/quienes-somos' },
-      { label: 'Reseña Histórica', href: '/servicios/resena-historica' },
-      { label: 'Trabaja con Nosotros', href: '/servicios/trabaja-con-nosotros' },
-      { label: 'Cotizar Plan', href: '/cotizar' },
+      { label: 'Quiénes Somos', href: comingSoonHref },
+      { label: 'Reseña Histórica', href: comingSoonHref },
+      { label: 'Trabaja con Nosotros', href: comingSoonHref },
+      { label: 'Cotizar Plan', href: comingSoonHref },
     ],
     atencion: [
-      { label: 'Obituarios', href: '/obituarios' },
-      { label: 'Agendar Visita', href: '/agendar-visita' },
-      { label: 'Pagar Plan', href: '/pagar-plan' },
-      { label: 'Contacto', href: '/contacto' },
+      { label: 'Ubicaciones', href: '/ubicaciones' },
+      { label: 'Obituarios', href: comingSoonHref },
+      { label: 'Agendar Visita', href: comingSoonHref },
+      { label: 'Contacto', href: comingSoonHref },
     ],
     recursos: [
-      { label: 'Planes', href: '/planes' },
-      { label: 'Recorrido 360°', href: '/recorrido-360' },
-      { label: 'Parque Conmemorativo', href: '/parque-conmemorativo' },
-      { label: 'Repatriaciones', href: '/repatriaciones' },
-      { label: 'Florería', href: '/floreria' },
+      { label: 'Planes', href: comingSoonHref },
+      { label: 'Recorrido 360°', href: comingSoonHref },
+      { label: 'Parque Conmemorativo', href: comingSoonHref },
+      { label: 'Repatriaciones', href: comingSoonHref },
+      { label: 'Florería', href: comingSoonHref },
     ],
     soporte: [
-      { label: 'Portal Cliente', href: '/cliente/dashboard' },
-      { label: 'Preguntas Frecuentes', href: '/faq' },
-      { label: 'Términos y Condiciones', href: '/legal/terminos' },
-      { label: 'Política de Privacidad', href: '/legal/privacidad' },
+      { label: 'Portal Cliente', href: comingSoonHref },
+      { label: 'Preguntas Frecuentes', href: comingSoonHref },
+      { label: 'Términos y Condiciones', href: comingSoonHref },
+      { label: 'Política de Privacidad', href: comingSoonHref },
     ],
   };
 
