@@ -17,11 +17,11 @@ export const CIUDAD_IMAGES: Record<string, string> = {
   'Quinchía': 'quinchia.webp',
 
   // Antioquia
-  'Medellín': 'julianza-medellin-182337_1280.webp',
-  'Itagüí': 'Itagui_central_park_church.webp',
-  'La Pintada': 'LaPintada3-.webp',
-  'Valparaíso': 'valparaiso2020.webp',
-  'Caramanta': 'que-hacer-en-Caramanta-Antioquia.webp',
+  'Medellín': 'antioquia/julianza-medellin-182337_1280.webp',
+  'Itagüí': 'antioquia/Itagui_central_park_church.webp',
+  'La Pintada': 'antioquia/LaPintada3-.webp',
+  'Valparaíso': 'antioquia/valparaiso2020.webp',
+  'Caramanta': 'antioquia/que-hacer-en-Caramanta-Antioquia.webp',
 
   // Quindío
   'Génova': 'genova.webp',
