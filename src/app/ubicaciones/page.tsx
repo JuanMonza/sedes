@@ -6,7 +6,7 @@ import Container from '@/components/ui/Container';
 import SectionTitle from '@/components/ui/SectionTitle';
 import FadeIn from '@/components/animations/FadeIn';
 import { SEDES, getAllDepartamentos } from '@/data/sedes';
-import { CIUDAD_IMAGES } from '@/config/ciudades';
+import { getCiudadImagePath } from '@/config/ciudades';
 
 export default function UbicacionesPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -112,32 +112,35 @@ export default function UbicacionesPage() {
                 </div>
               )}
 
-              {filtered.map((sede, index) => (
-                <FadeIn key={sede.id} delay={Math.min(index * 0.05, 0.4)}>
-                  <div
-                    onClick={() => setSelectedId(sede.id === selectedId ? null : sede.id)}
-                    className={`glass p-5 rounded-2xl border-2 cursor-pointer transition-all hover:scale-[1.01] hover:shadow-glass-lg ${
-                      selectedId === sede.id
-                        ? 'border-primary bg-primary/5'
-                        : 'border-border hover:border-primary/40'
-                    }`}
-                  >
-                    <div className="flex gap-4">
-                      {/* Imagen de la ciudad */}
-                      <div className="relative w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 bg-primary/10 border border-primary/20 flex items-center justify-center">
-                        {CIUDAD_IMAGES[sede.ciudad] ? (
-                          <Image
-                            src={`/images/ciudades/${CIUDAD_IMAGES[sede.ciudad]}`}
-                            alt={sede.ciudad}
-                            fill
-                            className="object-cover"
-                          />
-                        ) : (
-                          <svg width="24" height="24" fill="none" stroke="#3C60A2" strokeWidth="1.5" viewBox="0 0 24 24" aria-hidden="true">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0H5m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                          </svg>
-                        )}
-                      </div>
+              {filtered.map((sede, index) => {
+                const cityImage = getCiudadImagePath(sede.departamento, sede.ciudad);
+
+                return (
+                  <FadeIn key={sede.id} delay={Math.min(index * 0.05, 0.4)}>
+                    <div
+                      onClick={() => setSelectedId(sede.id === selectedId ? null : sede.id)}
+                      className={`glass p-5 rounded-2xl border-2 cursor-pointer transition-all hover:scale-[1.01] hover:shadow-glass-lg ${
+                        selectedId === sede.id
+                          ? 'border-primary bg-primary/5'
+                          : 'border-border hover:border-primary/40'
+                      }`}
+                    >
+                      <div className="flex gap-4">
+                        {/* Imagen de la ciudad */}
+                        <div className="relative w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 bg-primary/10 border border-primary/20 flex items-center justify-center">
+                          {cityImage ? (
+                            <Image
+                              src={cityImage}
+                              alt={`${sede.ciudad}, ${sede.departamento}`}
+                              fill
+                              className="object-cover"
+                            />
+                          ) : (
+                            <svg width="24" height="24" fill="none" stroke="#3C60A2" strokeWidth="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0H5m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                            </svg>
+                          )}
+                        </div>
 
                       {/* Info */}
                       <div className="flex-1 min-w-0">
@@ -206,10 +209,11 @@ export default function UbicacionesPage() {
                           </div>
                         )}
                       </div>
+                      </div>
                     </div>
-                  </div>
-                </FadeIn>
-              ))}
+                  </FadeIn>
+                );
+              })}
             </div>
 
             {/* Panel Mapa */}
