@@ -66,7 +66,6 @@ export default function SecurePdfViewer() {
           className="block h-[72vh] min-h-[560px] w-full bg-white"
           loading="lazy"
           referrerPolicy="no-referrer"
-          sandbox="allow-same-origin allow-scripts"
         />
 
         {noticeVisible && (
