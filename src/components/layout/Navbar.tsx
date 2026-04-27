@@ -15,6 +15,7 @@ export default function Navbar() {
     { href: comingSoonHref, label: 'Quiénes Somos' },
     { href: comingSoonHref, label: 'Reseña Histórica' },
     { href: comingSoonHref, label: 'Trabaja con Nosotros' },
+    { href: '/clausulas', label: 'Cláusulas' },
   ];
 
   return (
@@ -53,7 +54,7 @@ export default function Navbar() {
                   >
                     {serviciosSubmenu.map((item) => (
                       <Link
-                        key={item.href}
+                        key={`${item.href}-${item.label}`}
                         href={item.href}
                         className="block px-4 py-3 text-text hover:bg-primary/10 hover:text-primary transition-colors"
                       >
@@ -158,7 +159,7 @@ export default function Navbar() {
               <p className="font-semibold text-white px-2">Servicios</p>
               {serviciosSubmenu.map((item) => (
                 <Link
-                  key={item.href}
+                  key={`${item.href}-${item.label}`}
                   href={item.href}
                   className="block pl-6 pr-2 py-2 text-white/90 hover:text-white transition-colors"
                   onClick={() => setIsOpen(false)}
