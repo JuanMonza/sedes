@@ -5,7 +5,7 @@ import SecurePdfViewer from '@/components/clausulas/SecurePdfViewer';
 export default function ClausulasPage() {
   return (
     <section className="min-h-screen bg-gradient-to-b from-background via-white/70 to-background py-12 sm:py-16">
-      <Container maxWidth="2xl">
+      <Container maxWidth="xl">
         <FadeIn>
           <div className="mx-auto mb-8 max-w-3xl text-center">
             <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-primary">

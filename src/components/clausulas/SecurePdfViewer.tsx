@@ -4,6 +4,18 @@ import { useEffect, useRef, useState } from 'react';
 
 const pdfSrc = '/Clausulas_membrete_2026.pdf';
 
+type ContentBounds = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
+
+const VIEWER_MAX_WIDTH = 1160;
+const DOCUMENT_MAX_WIDTH = 900;
+const DOCUMENT_WIDTH_RATIO = 0.87;
+const PDF_RENDER_SCALE = 2.0;
+
 type PdfPage = {
   getViewport: (options: { scale: number }) => { width: number; height: number };
   render: (options: {
@@ -17,6 +29,19 @@ type PdfDocument = {
   getPage: (pageNumber: number) => Promise<PdfPage>;
   destroy: () => Promise<void>;
 };
+
+function getContentBounds(canvas: HTMLCanvasElement): ContentBounds {
+  const { width, height } = canvas;
+  const portraitWidth = Math.min(width * 0.9, height * 0.7);
+  const portraitHeight = Math.min(height * 0.96, portraitWidth * 1.42);
+
+  return {
+    x: Math.max(0, Math.round((width - portraitWidth) / 2)),
+    y: Math.max(0, Math.round((height - portraitHeight) / 2)),
+    width: Math.round(portraitWidth),
+    height: Math.round(portraitHeight),
+  };
+}
 
 export default function SecurePdfViewer() {
   const pagesRef = useRef<HTMLDivElement>(null);
@@ -87,7 +112,10 @@ export default function SecurePdfViewer() {
           return;
         }
 
-        const availableWidth = Math.max(280, pagesContainer.clientWidth - 32);
+        const availableWidth = Math.min(
+          DOCUMENT_MAX_WIDTH,
+          Math.max(300, (pagesContainer.clientWidth - 16) * DOCUMENT_WIDTH_RATIO),
+        );
 
         for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
           if (cancelled) {
@@ -95,35 +123,62 @@ export default function SecurePdfViewer() {
           }
 
           const page = await pdf.getPage(pageNumber);
-          const baseViewport = page.getViewport({ scale: 1 });
-          const scale = Math.min(1.45, availableWidth / baseViewport.width);
-          const viewport = page.getViewport({ scale });
-          const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+          const viewport = page.getViewport({ scale: PDF_RENDER_SCALE });
+          const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
 
           const pageShell = document.createElement('div');
           pageShell.className =
-            'mx-auto mb-6 overflow-hidden rounded-xl border border-border bg-white shadow-lg shadow-primary/5';
+            'mx-auto mb-5 w-fit max-w-full overflow-hidden rounded-xl border border-border bg-white shadow-lg shadow-primary/5';
 
+          const sourceCanvas = document.createElement('canvas');
+          const sourceContext = sourceCanvas.getContext('2d', { willReadFrequently: true });
           const canvas = document.createElement('canvas');
           const context = canvas.getContext('2d');
 
-          if (!context) {
+          if (!sourceContext || !context) {
             throw new Error('No se pudo preparar el visor del documento.');
           }
 
-          canvas.width = Math.floor(viewport.width * pixelRatio);
-          canvas.height = Math.floor(viewport.height * pixelRatio);
-          canvas.style.width = `${viewport.width}px`;
-          canvas.style.height = `${viewport.height}px`;
-          canvas.style.maxWidth = '100%';
+          sourceCanvas.width = Math.floor(viewport.width * pixelRatio);
+          sourceCanvas.height = Math.floor(viewport.height * pixelRatio);
+          sourceContext.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+          sourceContext.fillStyle = '#ffffff';
+          sourceContext.fillRect(0, 0, viewport.width, viewport.height);
+
+          await page.render({ canvasContext: sourceContext, viewport }).promise;
+
+          const bounds = getContentBounds(sourceCanvas);
+          const displayWidth = availableWidth;
+          const displayHeight = displayWidth * (bounds.height / bounds.width);
+
+          canvas.width = bounds.width;
+          canvas.height = bounds.height;
+          canvas.style.width = `${displayWidth}px`;
+          canvas.style.height = `${displayHeight}px`;
           canvas.style.display = 'block';
           canvas.setAttribute('aria-label', `Página ${pageNumber}`);
 
-          context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+          context.fillStyle = '#ffffff';
+          context.fillRect(0, 0, bounds.width, bounds.height);
+          context.drawImage(
+            sourceCanvas,
+            bounds.x,
+            bounds.y,
+            bounds.width,
+            bounds.height,
+            0,
+            0,
+            bounds.width,
+            bounds.height,
+          );
+
+          pageShell.style.width = `${displayWidth}px`;
+          pageShell.style.maxWidth = 'none';
           pageShell.appendChild(canvas);
           pagesContainer.appendChild(pageShell);
-
-          await page.render({ canvasContext: context, viewport }).promise;
+          setIsLoading(false);
+          sourceCanvas.width = 0;
+          sourceCanvas.height = 0;
         }
 
         if (!cancelled) {
@@ -149,7 +204,8 @@ export default function SecurePdfViewer() {
   return (
     <>
       <div
-        className="relative overflow-hidden rounded-2xl border border-border bg-white shadow-2xl shadow-primary/10"
+        className="relative mx-auto overflow-hidden rounded-2xl border border-border bg-white shadow-2xl shadow-primary/10"
+        style={{ maxWidth: `${VIEWER_MAX_WIDTH}px` }}
         onContextMenu={(event) => event.preventDefault()}
         onCopy={(event) => event.preventDefault()}
         onCut={(event) => event.preventDefault()}
@@ -164,7 +220,7 @@ export default function SecurePdfViewer() {
           </span>
         </div>
 
-        <div className="h-[72vh] min-h-[560px] overflow-y-auto bg-[#f6f4f2] px-3 py-5 sm:px-5">
+        <div className="h-[74vh] min-h-[480px] max-h-[840px] overflow-y-auto bg-[#f6f4f2] px-2 py-5 sm:px-4">
           {isLoading && (
             <div className="flex h-full min-h-[420px] items-center justify-center text-center">
               <div>
@@ -184,7 +240,7 @@ export default function SecurePdfViewer() {
 
           <div
             ref={pagesRef}
-            className={isLoading || hasError ? 'hidden select-none' : 'select-none'}
+            className={hasError ? 'hidden select-none' : 'mx-auto flex max-w-full select-none flex-col items-center'}
             aria-label="Cláusulas Jardines del Renacer 2026"
           />
         </div>
