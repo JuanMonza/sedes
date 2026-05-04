@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-const pdfSrc = '/Clausulas_membrete_2026.pdf';
+const pdfSrc = '/Clausulas_membrete_2026_final.pdf';
 
 type ContentBounds = {
   x: number;
