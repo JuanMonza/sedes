@@ -15,6 +15,8 @@ const VIEWER_MAX_WIDTH = 1160;
 const DOCUMENT_MAX_WIDTH = 900;
 const DOCUMENT_WIDTH_RATIO = 0.87;
 const PDF_RENDER_SCALE = 2.0;
+const CONTENT_WIDTH_RATIO = 0.98;
+const CONTENT_HEIGHT_RATIO = 0.97;
 
 type PdfPage = {
   getViewport: (options: { scale: number }) => { width: number; height: number };
@@ -32,8 +34,8 @@ type PdfDocument = {
 
 function getContentBounds(canvas: HTMLCanvasElement): ContentBounds {
   const { width, height } = canvas;
-  const portraitWidth = Math.min(width * 0.9, height * 0.7);
-  const portraitHeight = Math.min(height * 0.96, portraitWidth * 1.42);
+  const portraitWidth = Math.min(width * CONTENT_WIDTH_RATIO, height * 0.76);
+  const portraitHeight = Math.min(height * CONTENT_HEIGHT_RATIO, portraitWidth * 1.42);
 
   return {
     x: Math.max(0, Math.round((width - portraitWidth) / 2)),
